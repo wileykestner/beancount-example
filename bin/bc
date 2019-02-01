@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+VIRTUALENV_DIRECTORY=env
+BEANCOUNT_FILE=example.beancount
+
+export PYTHONPATH=${PYTHONPATH}:.
+
+set -e
+
+
+if [ $# -eq 0 ]; then
+    echo "Usage: Enter a command to run (example: '$0 bean-check')"
+    echo "Whatever command you run after '$0' will be executed inside of a virtual environment with the example.beancount file as the first argument, so running '$0 vim' is translated into: 'source env/bin/activate && vim ${BEANCOUNT_FILE}'."
+    exit 1
+fi
+
+command -v python3 >/dev/null 2>&1 || { echo >&2 "\`python3\` is required, please install it with \`brew install python3\`.  Aborting."; exit 1; }
+command -v virtualenv >/dev/null 2>&1 || { echo >&2 "\`virtualenv\` is required, please install it with \`pip3 install virtualenv\`.  Aborting."; exit 1; }
+
+if [ ! -d ${VIRTUALENV_DIRECTORY} ]; then
+    virtualenv ${VIRTUALENV_DIRECTORY} -p python3
+fi
+
+if [ -z "${VIRTUAL_ENV}" ]; then
+    source ${VIRTUALENV_DIRECTORY}/bin/activate
+    pip3 install -q --upgrade pip wheel setuptools >/dev/null 2>&1
+    pip3 install fava >/dev/null 2>&1
+
+    if [ ! -f ${BEANCOUNT_FILE} ]; then
+        bean-example > ${BEANCOUNT_FILE}
+    fi
+fi
+
+$1 ${BEANCOUNT_FILE} "${@:2}"
+
