@@ -10,7 +10,8 @@ set -e
 
 if [[ $# -eq 0 ]]; then
     echo "Usage: Enter a command to run (example: '$0 bean-check')"
-    echo "Whatever command you run after '$0' will be executed inside of a virtual environment with the example.beancount file as the first argument, so running '$0 vim' is translated into: 'source env/bin/activate && vim ${BEANCOUNT_FILE}'."
+    echo "Whatever command you run after '$0' will be executed inside of a virtual environment with the ${BEANCOUNT_FILE} file as the first argument, so running '$0 vim' is translated into: 'source env/bin/activate &&
+    vim ${BEANCOUNT_FILE}'."
     exit 1
 fi
 
