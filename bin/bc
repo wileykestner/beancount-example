@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VIRTUALENV_DIRECTORY=env
+VIRTUALENV_DIRECTORY="env"
 BEANCOUNT_FILE=example.beancount
 
 export PYTHONPATH=${PYTHONPATH}:.
@@ -23,6 +23,7 @@ if [[ ! -d ${VIRTUALENV_DIRECTORY} ]]; then
 fi
 
 if [[ -z "${VIRTUAL_ENV}" ]]; then
+    # shellcheck source=env/bin/activate
     source ${VIRTUALENV_DIRECTORY}/bin/activate
     pip3 install -q --upgrade pip wheel setuptools >/dev/null 2>&1
     pip3 install fava >/dev/null 2>&1

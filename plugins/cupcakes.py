@@ -14,11 +14,15 @@ def cupcakes(entries, option_map, configuration_string):
     errors = tuple()
 
     first_account, second_account, amount_string = configuration_string.strip().split(",")
+    meta = {"lineno": -1, "filename": option_map['filename']}
 
-    assets_leg = _get_posting(account=first_account, units="-{}".format(amount_string), currency="USD")
-    expenses_leg = _get_posting(account=second_account, units=amount_string, currency="USD")
-    postings = (assets_leg, expenses_leg)
-    transaction = _get_transaction(transaction_date=date.today(), postings=postings, narration="Bought a cupcake")
+    assets_leg = _get_posting(account=first_account, units="-{}".format(amount_string), currency="USD", meta=meta)
+    expenses_leg = _get_posting(account=second_account, units=amount_string, currency="USD", meta=meta)
+    postings = [assets_leg, expenses_leg]
+    transaction = _get_transaction(transaction_date=date.today(),
+                                   postings=postings,
+                                   narration="Bought a cupcake",
+                                   meta=meta)
     updated_entries = entries + [transaction]
 
     return updated_entries, errors
@@ -27,12 +31,7 @@ def cupcakes(entries, option_map, configuration_string):
 def _get_transaction(transaction_date: date,
                      postings: Collection[Posting],
                      narration: str,
-                     lineno: Optional[int] = -1,
-                     meta: Optional[Dict[str, Any]] = None) -> Transaction:
-    meta = meta if meta else {}
-    if not meta.get("lineno", None):
-        meta["lineno"] = lineno
-
+                     meta: Dict[str, Any]) -> Transaction:
     return Transaction(date=transaction_date,
                        meta=meta,
                        postings=postings,
@@ -43,9 +42,7 @@ def _get_transaction(transaction_date: date,
                        links=frozenset())
 
 
-def _get_posting(account: str, units: str, currency: str, meta: Optional[Dict[str, Any]] = None):
-    meta = meta if meta else {}
-
+def _get_posting(account: str, units: str, currency: str, meta: Dict[str, Any]):
     return Posting(account=Account(account),
                    units=Amount(number=Decimal(units), currency=Currency(currency)),
                    cost=None,
