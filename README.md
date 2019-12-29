@@ -11,5 +11,5 @@ Run through the setup steps below to install the libraries in a virtual environm
 1. `git clone https://github.com/wileykestner/beancount-example`
 2. `cd beancount-example`
 3. `./bin/bc bean-check` (This script will create an example.beancount data file if you do not already have one and ensure that it is valid.)
-4. `./bin/bc fava` (This will open the beautiful fava web application using your new example.beancount file as input.)
+4. `./bin/bc fava` (This will open the beautiful fava web application using your new `example.beancount` file as input.)
 5. Visit http://localhost:5000/ in your web browser to see fava in action!
