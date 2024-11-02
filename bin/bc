@@ -16,17 +16,16 @@ if [[ $# -eq 0 ]]; then
 fi
 
 command -v python3 >/dev/null 2>&1 || { echo >&2 "\`python3\` is required, please install it with \`brew install python3\`.  Aborting."; exit 1; }
-command -v virtualenv >/dev/null 2>&1 || { echo >&2 "\`virtualenv\` is required, please install it with \`pip3 install virtualenv\`.  Aborting."; exit 1; }
 
 if [[ ! -d ${VIRTUALENV_DIRECTORY} ]]; then
-    virtualenv ${VIRTUALENV_DIRECTORY} -p python3
+    python3 -m venv ${VIRTUALENV_DIRECTORY}
 fi
 
 if [[ -z "${VIRTUAL_ENV}" ]]; then
     # shellcheck source=env/bin/activate
     source ${VIRTUALENV_DIRECTORY}/bin/activate
-    pip3 install -q --upgrade pip wheel setuptools >/dev/null 2>&1
-    pip3 install fava >/dev/null 2>&1
+    python3 -m pip install -q --upgrade pip wheel setuptools >/dev/null 2>&1
+    python3 -m pip install fava >/dev/null 2>&1
 
     if [[ ! -f ${BEANCOUNT_FILE} ]]; then
         bean-example > ${BEANCOUNT_FILE}
